@@ -56,6 +56,20 @@ let transpileJSForProd = () => {
         .pipe(dest(`prod/scripts`));
 };
 
+
+let copyUnprocessedAssetsForProd = () => {
+    return src([
+        `dev/*.*`,
+        `dev/**`,
+        `!dev/html/`,
+        `!dev/html/*.*`,
+        `!dev/html/**`,
+        `!dev/**/*.js`,
+        `!dev/styles/**`
+    ], {dot: true})
+        .pipe(dest(`prod`));
+};
+
 exports.validateHTML = validateHTML;
 exports.compressHTML = compressHTML;
 exports.validateCSS = validateCSS;
@@ -63,3 +77,4 @@ exports.compressCSS = compressCSS;
 exports.validateJS = validateJS;
 exports.transpileJSForDev = transpileJSForDev;
 exports.transpileJSForProd = transpileJSForProd;
+exports.copyUnprocessedAssetsForProd = copyUnprocessedAssetsForProd;
