@@ -6,6 +6,8 @@ const cssCompressor = require(`gulp-clean-css`);
 const jsLinter = require(`gulp-eslint`);
 const jsCompressor = require(`gulp-uglify`);
 const babel = require(`gulp-babel`);
+const browserSync = require(`browser-sync`),
+    reload = browserSync.reload;
 
 let validateHTML = () => {
     return src(`index.html`)
@@ -40,7 +42,7 @@ let validateCSS = () => {
 let compressCSS = () => {
     return src(`styles/*.css`)
         .pipe(cssCompressor())
-        .pipe(dest(`prod/styles`));
+        .pipe(dest(`production/styles`));
 };
 
 let transpileJSForDev = () => {
@@ -53,21 +55,40 @@ let transpileJSForProd = () => {
     return src(`scripts/main.js`)
         .pipe(babel())
         .pipe(jsCompressor())
-        .pipe(dest(`prod/scripts`));
+        .pipe(dest(`production/scripts`));
 };
 
 
 let copyUnprocessedAssetsForProd = () => {
     return src([
-        `dev/*.*`,
-        `dev/**`,
-        `!dev/html/`,
-        `!dev/html/*.*`,
-        `!dev/html/**`,
-        `!dev/**/*.js`,
-        `!dev/styles/**`
+        `temp/*.*`,
+        `temp/**`,
+        `!temp/html/`,
+        `!temp/html/*.*`,
+        `!temp/html/**`,
+        `!temp/**/*.js`,
+        `!temp/styles/**`
     ], {dot: true})
-        .pipe(dest(`prod`));
+        .pipe(dest(`prodution`));
+};
+
+let serve = () => {
+    browserSync({
+        reloadDelay: 50,
+        browser: `*`,
+        server: {
+            baseDir: [
+                `.temp`,
+                `./`,
+            ]
+        }
+    });
+
+    watch(`scripts/main.js`, series(validateJS, transpileJSForDev)).on(`change`, reload);
+
+    watch(`styles/main.css`).on(`change`, reload);
+
+    watch(`index.html`).on(`change`, reload);
 };
 
 exports.validateHTML = validateHTML;
@@ -78,3 +99,13 @@ exports.validateJS = validateJS;
 exports.transpileJSForDev = transpileJSForDev;
 exports.transpileJSForProd = transpileJSForProd;
 exports.copyUnprocessedAssetsForProd = copyUnprocessedAssetsForProd;
+exports.serve = series(
+    validateJS,
+    transpileJSForDev,
+    serve
+);
+exports.build = series(
+    compressHTML,
+    compressCSS,
+    transpileJSForProd
+);
