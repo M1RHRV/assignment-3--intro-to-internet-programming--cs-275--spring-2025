@@ -1,3 +1,6 @@
+const showMenuTrigger = document.querySelector(`#js-triggers li:first-child a`);
+const dropdownMenu = document.createElement(`div`);
+dropdownMenu.classList.add(`dropdown-menu`);
 const modalPanel = document.querySelector(`.modal-panel`);
 const modalContent = document.querySelector(`.modal-content-pane`);
 modalContent.style.width = `90%`;
@@ -32,4 +35,26 @@ window.addEventListener(`click`, (e) => {
     }
 });
 
+dropdownMenu.innerHTML = `
+  <ul>
+    <li><a href="#">Menu 1</a></li>
+    <li><a href="#">Menu 2</a></li>
+  </ul>
+`;
 
+
+showMenuTrigger.parentElement.appendChild(dropdownMenu);
+
+
+showMenuTrigger.addEventListener(`click`, (e) => {
+    e.preventDefault();
+    const isVisible = dropdownMenu.style.display === `block`;
+    dropdownMenu.style.display = isVisible ? `none` : `block`;
+});
+
+
+window.addEventListener(`click`, (e) => {
+    if (!dropdownMenu.contains(e.target) && e.target !== showMenuTrigger) {
+        dropdownMenu.style.display = `none`;
+    }
+});
