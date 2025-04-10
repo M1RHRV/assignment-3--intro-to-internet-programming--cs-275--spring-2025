@@ -1,4 +1,10 @@
 const modalPanel = document.querySelector(`.modal-panel`);
+const modalContent = document.querySelector(`.modal-content-pane`);
+modalContent.style.width = `90%`;
+modalContent.style.height = `80%`;
+modalContent.style.maxWidth = `900px`;
+modalContent.style.maxHeight = `700px`;
+
 const modalTrigger = document.querySelector(`#js-triggers li:nth-child(2) a`);
 const closeModal = document.createElement(`span`);
 
@@ -25,3 +31,5 @@ window.addEventListener(`click`, (e) => {
         modalPanel.style.display = `none`;
     }
 });
+
+

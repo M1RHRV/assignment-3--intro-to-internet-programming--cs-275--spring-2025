@@ -1,3 +1,11 @@
+:root {
+width: auto;
+height: 48px;
+background-color: #ffffff;
+color: #000000;
+
+}
+
 body {
   padding: auto;
   font-family: Arial, Helvetica, sans-serif;
@@ -79,6 +87,7 @@ nav > ul > li {
 
 nav > ul > li:hover > ul {
   visibility: visible;
+  display: block;
 }
 
 nav > ul > li > ul {
@@ -121,3 +130,4 @@ nav > ul > li > ul {
   width: 60%;
   max-width: 500px;
 }
+
